@@ -31,6 +31,12 @@ app.use(
     store: MongoStore.create({
       mongoUrl: connectionUrl,
     }),
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // HTTPS en production seulement
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 heures
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    },
   })
 );
 
