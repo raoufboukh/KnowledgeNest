@@ -10,6 +10,7 @@ const user = new mongoose.Schema(
         return !(this as any).googleId;
       },
     },
+    image: { type: String, default: "" },
     googleId: { type: String },
   },
   { timestamps: true }
