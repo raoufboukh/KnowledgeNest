@@ -41,6 +41,7 @@ export default function configurePassport(passport: passport.PassportStatic) {
               googleId: profile.id,
               email: profile.emails?.[0]?.value,
               name: profile.displayName,
+              image: profile.photos?.[0]?.value,
             });
           }
           return done(null, user);
