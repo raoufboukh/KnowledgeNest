@@ -37,7 +37,7 @@ const Register = () => {
       .catch((err) => console.log(err));
   }, [dispatch, router]);
   return (
-    <section className="grid lg:grid-cols-2 h-screen bg-accent">
+    <section className="grid lg:grid-cols-2 h-screen bg-accent text-black">
       <div className="flex items-center justify-center">
         <div className="sm:w-80 text-center border border-primary rounded-xl p-8 shadow-lg">
           <h1 className="text-3xl font-bold mb-4">New Member?</h1>
