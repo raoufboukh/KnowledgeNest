@@ -3,9 +3,30 @@
   /* #875a38 */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-primary: #3e2522;
-  --color-secondary: #8c6e63;
-  --color-tertiary: #d3a376;
-  --color-accent: #ffe0b2;
-  --color-accent-2: #fff2df;
+  --color-primary: #2f1b14; /* Dark espresso */
+  --color-secondary: #8d6e63; /* Medium brown */
+  --color-tertiary: #bcaaa4; /* Light brown-gray */
+  --color-accent: #efebe9; /* Very light brown */
+  --color-accent-2: #fafafa; /* Pure light gray */
+}
+
+@keyframes move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-110%);
+  }
+}
+
+.animate-move {
+  animation: move 20s linear infinite;
+}
+
+.animate-move:hover {
+  animation-play-state: paused;
+}
+
+.h2 {
+  @apply text-4xl font-bold mb-20 text-primary text-center;
 }
