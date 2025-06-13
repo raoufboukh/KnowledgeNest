@@ -127,3 +127,25 @@ export const getCarById = async (req: any, res: any) => {
     res.status(500).json({ message: "Error fetching car" });
   }
 };
+
+export const getAllBrands = async (req: any, res: any) => {
+  try {
+    const cars = await Car.find();
+    const brands = Array.from(new Set(cars.map((car) => car.brand))).sort();
+    res.status(200).json(brands);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching brands" });
+  }
+};
+
+export const deleteCar = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: "Car ID is required" });
+    const car = await Car.findByIdAndDelete(id);
+    if (!car) return res.status(404).json({ message: "Car not found" });
+    res.status(200).json({ message: "Car deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting car" });
+  }
+};
