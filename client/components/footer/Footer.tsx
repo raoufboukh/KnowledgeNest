@@ -4,6 +4,7 @@ import {
   MdOutlinePhone,
   MdOutlineMap,
 } from "react-icons/md";
+import { footerLinks } from "../constants";
 
 const Footer = () => {
   return (
@@ -20,21 +21,13 @@ const Footer = () => {
           <div className="lg:basis-[30%] md:basis-[45%] basis-full md:text-left text-center">
             <h3 className="text-xl font-semibold mb-5">Quick Links</h3>
             <ul className=" text-gray-300 flex flex-col gap-3">
-              <li>
-                <Link href="/buy" className="hover:text-gray-400">
-                  Buy Cars
-                </Link>
-              </li>
-              <li>
-                <Link href="/sell" className="hover:text-gray-400">
-                  Sell Cars
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="hover:text-gray-400">
-                  Privacy Policy
-                </Link>
-              </li>
+              {footerLinks.map((foot: any, i: number) => (
+                <li key={i}>
+                  <Link href={foot.link} className="hover:text-gray-400">
+                    {foot.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div className="lg:basis-[30%] md:basis-[45%] basis-full md:text-left text-center">
@@ -58,7 +51,7 @@ const Footer = () => {
               <li className=" text-gray-300">
                 <MdOutlineMap className="inline mr-2" />
                 <a
-                  href="https://www.google.com/maps/place/Your+Address"
+                  href="https://www.google.com/maps/place/ain abid"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-400"

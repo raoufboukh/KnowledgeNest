@@ -1,7 +1,7 @@
 export const links = [
   {
     title: "Buy",
-    link: "/buy",
+    link: "/cars",
   },
   {
     title: "Sell",
@@ -97,5 +97,25 @@ export const carBrands = [
   {
     name: "Dacia",
     logo: "/assets/dacia-svgrepo-com.svg",
+  },
+];
+
+export const years = Array.from(
+  { length: 50 },
+  (_, i) => new Date().getFullYear() - i
+);
+
+export const footerLinks = [
+  {
+    title: "Buy Cars",
+    link: "/cars",
+  },
+  {
+    title: "Sell Cars",
+    link: "/sell",
+  },
+  {
+    title: "Privacy Policy",
+    link: "privacy",
   },
 ];
