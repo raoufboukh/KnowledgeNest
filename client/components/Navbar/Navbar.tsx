@@ -1,11 +1,22 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { links } from "../constants";
 import { RiMenu3Fill, RiCloseFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store/store";
+import { checkAuth, logout } from "@/redux/Slices/AuthSlice";
+import LinksUser from "./LinksUser";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+  console.log(user);
   return (
     <header className="fixed top-0 left-0 z-50 w-full  bg-black/70">
       <div className="container mx-auto p-4 flex justify-between border-b border-tertiary items-center ">
@@ -40,17 +51,21 @@ const Navbar = () => {
             )}
           </div>
           <div>
-            {links.map(
-              (link, i) =>
-                link.title === "Sign" && (
-                  <Link
-                    key={i}
-                    href={link.link}
-                    className="bg-primary px-4 py-2 rounded-md text-white"
-                  >
-                    {link.title}
-                  </Link>
-                )
+            {!user ? (
+              links.map(
+                (link, i) =>
+                  link.title === "Sign" && (
+                    <Link
+                      key={i}
+                      href={link.link}
+                      className="bg-primary px-4 py-2 rounded-md text-white"
+                    >
+                      {link.title}
+                    </Link>
+                  )
+              )
+            ) : (
+              <LinksUser user={user} />
             )}
           </div>
         </nav>

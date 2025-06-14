@@ -119,3 +119,32 @@ export const footerLinks = [
     link: "privacy",
   },
 ];
+
+export const linksUser = [
+  {
+    title: "dashboard",
+    link: "/dashboard",
+  },
+  {
+    title: "Logout",
+  },
+];
+
+export const dashboardLinks = [
+  {
+    title: "My Cars",
+    link: "/dashboard/my-cars",
+  },
+  {
+    title: "Add Car",
+    link: "/dashboard/add-car",
+  },
+  {
+    title: "Profile",
+    link: "/dashboard/profile",
+  },
+  {
+    title: "Settings",
+    link: "/dashboard/settings",
+  },
+];

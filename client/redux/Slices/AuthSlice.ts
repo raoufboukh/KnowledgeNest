@@ -6,7 +6,7 @@ export const checkAuth = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/auth/check");
-      return response.data;
+      return response.data.user;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -18,7 +18,7 @@ export const login = createAsyncThunk(
   async (data: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("/auth/login", data);
-      return response.data;
+      return response.data.user;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -33,7 +33,7 @@ export const register = createAsyncThunk(
   ) => {
     try {
       const response = await axiosInstance.post("/auth/register", data);
-      return response.data;
+      return response.data.user;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -57,7 +57,7 @@ export const googleSuccess = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/auth/google/success");
-      return response.data;
+      return response.data.user;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
