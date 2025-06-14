@@ -81,6 +81,30 @@ export const deleteCar = createAsyncThunk(
   }
 );
 
+export const acceptCar = createAsyncThunk(
+  "cars/acceptCar",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.put(`/cars/accept/${id}`);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const rejectCar = createAsyncThunk(
+  "cars/rejectCar",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.put(`/cars/reject/${id}`);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   cars: [],
   car: null,
@@ -166,6 +190,40 @@ export const carSlice = createSlice({
         );
       })
       .addCase(deleteCar.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as SerializedError;
+      })
+      .addCase(acceptCar.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(acceptCar.fulfilled, (state: any, action) => {
+        state.loading = false;
+        const index = state.cars.findIndex(
+          (car: any) => car._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.cars[index] = action.payload;
+        }
+      })
+      .addCase(acceptCar.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as SerializedError;
+      })
+      .addCase(rejectCar.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(rejectCar.fulfilled, (state: any, action) => {
+        state.loading = false;
+        const index = state.cars.findIndex(
+          (car: any) => car._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.cars[index] = action.payload;
+        }
+      })
+      .addCase(rejectCar.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as SerializedError;
       });
