@@ -4,6 +4,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { User } from "../models/auth.models.ts";
 import passport from "passport";
 import dotenv from "dotenv";
+import cloudinary from "../lib/cloudinary.ts";
 dotenv.config();
 
 export default function configurePassport(passport: passport.PassportStatic) {
@@ -96,7 +97,17 @@ export const register = async (req: any, res: any) => {
       password: hashedPassword,
     });
     await newUser.save();
-    res.status(201).json({ message: "User created successfully" });
+
+    req.login(newUser, (err: any) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: "Registration successful but login failed" });
+      }
+      res
+        .status(201)
+        .json({ message: "User created successfully", user: newUser });
+    });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
@@ -114,5 +125,48 @@ export const checkAuth = (req: any, res: any) => {
     res.status(200).json({ user: req.user });
   } else {
     res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
+export const updateProfile = async (req: any, res: any) => {
+  try {
+    const { name, email, image } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (email) {
+      const existingUser = await User.find({ email });
+      if (
+        existingUser.length > 0 &&
+        existingUser[0]._id.toString() !== user._id.toString()
+      ) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+    }
+
+    const imageUrl = image
+      ? await cloudinary.uploader.upload(image)
+      : user.image;
+
+    const upload =
+      typeof imageUrl === "object" && imageUrl.secure_url
+        ? imageUrl.secure_url
+        : imageUrl;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      {
+        name: name || user.name,
+        email: email || user.email,
+        image: upload,
+      },
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .json({ message: "Profile updated successfully", user: updatedUser });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message || "Server Error" });
   }
 };

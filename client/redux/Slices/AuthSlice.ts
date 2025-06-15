@@ -76,8 +76,24 @@ export const googleFailed = createAsyncThunk(
   }
 );
 
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (
+    data: { name: string; email: string; image: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await axiosInstance.put("/auth/update", data);
+      return response.data.user;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   user: null,
+  isUpdating: false,
   isChecking: false,
   isSignInUp: false,
   isLogginIn: false,
@@ -147,6 +163,16 @@ export const authSlice = createSlice({
       })
       .addCase(googleFailed.rejected, (state) => {
         state.isLogginIn = false;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.isUpdating = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isUpdating = false;
+        state.user = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state) => {
+        state.isUpdating = false;
       });
   },
 });
