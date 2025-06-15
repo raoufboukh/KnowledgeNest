@@ -132,19 +132,23 @@ export const linksUser = [
 
 export const dashboardLinks = [
   {
+    title: "All Cars",
+    role: ["admin"],
+  },
+  {
     title: "My Cars",
-    link: "/dashboard/my-cars",
+    role: ["user", "admin"],
+  },
+  {
+    title: "Notifications",
+    role: ["admin"],
   },
   {
     title: "Add Car",
-    link: "/dashboard/add-car",
+    role: ["admin", "user"],
   },
   {
     title: "Profile",
-    link: "/dashboard/profile",
-  },
-  {
-    title: "Settings",
-    link: "/dashboard/settings",
+    role: ["user", "admin"],
   },
 ];
