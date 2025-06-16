@@ -21,7 +21,7 @@ const Hero = () => {
             Discover the best cars and find your dream ride.
           </p>
           <Link
-            href={"/buy"}
+            href={"/cars"}
             className="bg-primary px-6 py-3 rounded-md font-semibold hover:bg-primary/80 transition duration-300"
           >
             Get Started

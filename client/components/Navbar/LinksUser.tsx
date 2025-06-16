@@ -10,13 +10,13 @@ const LinksUser = ({ user }: any) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const dispatch = useDispatch<AppDispatch>();
   return (
-    <div className="relative">
+    <div className="relative w-fit">
       <Image
         src={user?.image || "/assets/avatar.png"}
         alt="User Avatar"
         width={40}
         height={40}
-        className="rounded-full cursor-pointer"
+        className="rounded-full cursor-pointer size-10"
         onClick={() => setIsOpen(!isOpen)}
       />
       <div

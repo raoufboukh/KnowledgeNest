@@ -2,10 +2,10 @@
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { links } from "../constants";
-import { RiMenu3Fill, RiCloseFill } from "react-icons/ri";
+import { RiMenu3Fill, RiCloseFill, RiCarLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store/store";
-import { checkAuth, logout } from "@/redux/Slices/AuthSlice";
+import { checkAuth } from "@/redux/Slices/AuthSlice";
 import LinksUser from "./LinksUser";
 
 const Navbar = () => {
@@ -16,12 +16,11 @@ const Navbar = () => {
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
-  console.log(user);
   return (
     <header className="fixed top-0 left-0 z-50 w-full  bg-black/70">
-      <div className="container mx-auto p-4 flex justify-between border-b border-tertiary items-center ">
-        <Link href="/" className="text-3xl font-bold">
-          Cars
+      <div className="container mx-auto py-4 lg:px-16 px-8 flex justify-between border-b border-tertiary items-center ">
+        <Link href="/" className="text-3xl font-bold flex items-center gap-1">
+          <RiCarLine /> <span className="sm:block hidden">Cars</span>
         </Link>
         <RiMenu3Fill
           className="lg:hidden cursor-pointer"
