@@ -4,58 +4,6 @@ import React from "react";
 import { MdEdit, MdDelete, MdVisibility } from "react-icons/md";
 
 const MyCarsSection = ({ user }: { user: any }) => {
-  const [myCars, setMyCars] = React.useState<any>([]);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    fetchMyCars();
-  }, []);
-
-  const fetchMyCars = async () => {
-    setLoading(true);
-    try {
-      // API call to fetch user's cars
-      // Mock data for now
-      setMyCars([
-        {
-          _id: "1",
-          name: "My Toyota Corolla",
-          brand: "Toyota",
-          model: "Corolla",
-          year: 2020,
-          price: "25000 DZ",
-          status: "approved",
-          image: "/assets/car1.jpg",
-          createdAt: "2024-01-15",
-        },
-        {
-          _id: "2",
-          name: "My Honda Civic",
-          brand: "Honda",
-          model: "Civic",
-          year: 2019,
-          price: "22000 DZ",
-          status: "pending",
-          image: "/assets/car2.jpg",
-          createdAt: "2024-01-10",
-        },
-      ]);
-    } catch (error) {
-      console.error("Error fetching my cars:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="p-8 text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading your cars...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="p-6">
       <div className="mb-6 flex justify-between items-center">
@@ -69,14 +17,14 @@ const MyCarsSection = ({ user }: { user: any }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {myCars.map((car: any) => (
+        {user.cars.map((car: any) => (
           <div
             key={car._id}
             className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="aspect-video bg-gray-200 relative">
               <Image
-                src={car.image || "/assets/car-placeholder.jpg"}
+                src={car.images[0]}
                 alt={car.name}
                 width={400}
                 height={300}
@@ -84,7 +32,7 @@ const MyCarsSection = ({ user }: { user: any }) => {
               />
               <div
                 className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium ${
-                  car.status === "approved"
+                  car.status === "accepted"
                     ? "bg-green-100 text-green-800"
                     : car.status === "pending"
                     ? "bg-yellow-100 text-yellow-800"
@@ -122,7 +70,7 @@ const MyCarsSection = ({ user }: { user: any }) => {
         ))}
       </div>
 
-      {myCars.length === 0 && (
+      {user.cars.length === 0 && (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">🚗</div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">
