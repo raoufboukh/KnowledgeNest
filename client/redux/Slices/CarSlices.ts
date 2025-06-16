@@ -1,6 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
 import {
-  ActionCreatorWithPreparedPayload,
   createAsyncThunk,
   createSlice,
   SerializedError,
