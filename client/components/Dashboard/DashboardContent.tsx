@@ -18,7 +18,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   const renderContent = () => {
     switch (activeSection) {
       case "All Cars":
-        return <AllCarsSection user={user} />;
+        return <AllCarsSection />;
       case "My Cars":
         return <MyCarsSection user={user} />;
       case "Notifications":
@@ -28,7 +28,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
       case "Profile":
         return <ProfileSection user={user} />;
       default:
-        return <AllCarsSection user={user} />;
+        return <AllCarsSection />;
     }
   };
 
