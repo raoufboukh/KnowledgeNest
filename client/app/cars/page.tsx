@@ -2,23 +2,41 @@
 import AllCars from "@/components/cars/AllCars";
 import CarsByInformation from "@/components/cars/CarsByInformation";
 import { years } from "@/components/constants";
-import Footer from "@/components/footer/Footer";
+import { getAllBrands, getCars } from "@/redux/Slices/CarSlices";
 import { AppDispatch, RootState } from "@/redux/store/store";
-import React from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Cars = () => {
   const cars = useSelector((state: RootState) => state.cars);
-  const [info, setInfo] = React.useState({
+  const [info, setInfo] = useState({
     brand: "",
     model: "",
     year: "",
   });
   const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(getCars());
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAllBrands());
+  }, [dispatch]);
+
+  if (cars?.loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-accent">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-accent-2 pt-20 text-primary">
       <h2 className="text-5xl text-center font-bold">Our Cars</h2>
-      <div className="container mx-auto px-8">
+      <div className="container mx-auto px-8 pb-10">
         <form
           action=""
           className="text-center"
@@ -82,7 +100,6 @@ const Cars = () => {
       ) : (
         <AllCars />
       )}
-      <Footer />
     </div>
   );
 };

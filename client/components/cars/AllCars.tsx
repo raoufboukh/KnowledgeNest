@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 const AllCars = () => {
   const { cars } = useSelector((state: RootState) => state.cars);
   return (
-    <div className="text-black bg-accent py-8 lg:py-16 my-10  overflow-hidden">
+    <div className="text-black bg-accent py-8 lg:py-16 overflow-hidden">
       {cars.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 px-8 md:px-16 container mx-auto">
           {cars.map((car: any, index: number) => (
@@ -34,7 +34,7 @@ const AllCars = () => {
                 </p>
               </div>
               <Image
-                src={car.image}
+                src={car.images[0]}
                 alt={car.name}
                 width={500}
                 height={300}
@@ -68,13 +68,13 @@ const AllCars = () => {
               </div>
               <div className="px-4 py-2 text-sm">
                 <div className=" bg-accent rounded-md px-2 py-1 mb-2 flex flex-col gap-1">
-                  <p className="font-semibold">{car.contact[0].address}</p>
+                  <p className="font-semibold">{car.contact.address}</p>
                   <a
-                    href={`tel:${car.contact[0].phone}`}
+                    href={`tel:${car.contact.phone}`}
                     className="flex items-center gap-1"
                   >
                     {" "}
-                    <BiPhone /> {car.contact[0].phone}
+                    <BiPhone /> {car.contact.phone}
                   </a>
                 </div>
               </div>
