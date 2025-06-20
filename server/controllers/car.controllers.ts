@@ -1,6 +1,7 @@
 import { Car } from "../models/car.models.ts";
 import cloudinary from "../lib/cloudinary.ts";
 import { User } from "../models/auth.models.ts";
+import mongoose from "mongoose";
 
 export const getCars = async (req: any, res: any) => {
   try {
@@ -95,7 +96,10 @@ export const addCar = async (req: any, res: any) => {
       });
       images[i] = result.secure_url;
     }
+
+    const id = new mongoose.Types.ObjectId();
     const newCar = {
+      _id: id,
       name,
       brand,
       model,
@@ -120,6 +124,8 @@ export const addCar = async (req: any, res: any) => {
       carOption,
       user: req.user._id,
     };
+
+    console.log("New car data:", newCar);
 
     await User.findByIdAndUpdate(req.user._id, {
       $push: {
@@ -149,8 +155,6 @@ export const addCar = async (req: any, res: any) => {
     res.status(500).json({ message: error.message || "Error adding car" });
   }
 };
-
-// ...existing code...
 
 export const acceptCar = async (req: any, res: any) => {
   try {
@@ -182,52 +186,101 @@ export const acceptCar = async (req: any, res: any) => {
       return res.status(404).json({ message: "Notification not found" });
 
     const senderId = notification.senderId;
-    const carId = notification.cars._id;
-    if (!senderId)
-      return res.status(400).json({ message: "Sender ID is required" });
+    const notificationCar = notification.cars._id;
 
-    // Update the car status in the user's cars array
-    await User.findOneAndUpdate(
-      { _id: senderId, "cars._id": carId },
-      {
-        $set: {
-          "cars.$.status": "accepted",
-        },
-      },
+    console.log(notificationCar);
+
+    console.log("Sender ID:", senderId);
+    // console.log(
+    //   "Notification car data:",
+    //   JSON.stringify(notificationCar, null, 2)
+    // );
+
+    // Find the user
+    const user = await User.findById(senderId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log("User found:", user.name);
+
+    // Since the car ID from notification is undefined, let's find the car by matching other fields
+    let carIndex = -1;
+    let matchedCar = null;
+
+    if (user.cars && Array.isArray(user.cars)) {
+      for (let i = 0; i < user.cars.length; i++) {
+        const car = user.cars[i];
+
+        // Match by multiple fields to find the correct car
+        if (
+          car._id.toString() === notificationCar.toString() &&
+          car.status === "pending" // Ensure we only accept pending cars
+        ) {
+          // Only pending cars
+          carIndex = i;
+          matchedCar = car;
+          console.log("Found matching car at index:", i);
+          console.log("Car ID:", car._id);
+          break;
+        }
+      }
+    }
+
+    if (carIndex === -1) {
+      return res
+        .status(404)
+        .json({ message: "Matching pending car not found in user's array" });
+    }
+
+    // Update using direct index (most reliable method)
+    const updateQuery: { [key: string]: any } = {};
+    updateQuery[`cars.${carIndex}.status`] = "accepted";
+
+    const updateResult = await User.findByIdAndUpdate(
+      senderId,
+      { $set: updateQuery },
       { new: true }
     );
 
-    // Get the car data from the notification
-    const car = notification.cars;
+    console.log(
+      "Update with index result:",
+      updateResult ? "Success" : "Failed"
+    );
 
-    // Create a new car document in the Car collection
+    if (updateResult) {
+      console.log("Updated car status:", updateResult.cars[carIndex].status);
+    }
+
+    // Create a new car document in the Car collection using the matched car data
+    const carToSave = matchedCar; // Use the actual car from user's array
+
+    if (!carToSave) {
+      return res.status(404).json({ message: "Car data not found" });
+    }
+
     const newCar = new Car({
-      name: car.name,
-      brand: car.brand,
-      model: car.model,
-      color: car.color,
-      fuel: car.fuel,
-      engine: car.engine,
-      document: car.document,
-      gearBox: car.gearBox,
-      mileage: car.mileage,
-      year: car.year,
-      price: car.price,
-      images: car.images,
-      description: car.description,
-      carOption: car.carOption,
-      contact: {
-        name: car.contact.name,
-        email: car.contact.email,
-        phone: car.contact.phone,
-        address: car.contact.address,
-        city: car.contact.city,
-        country: car.contact.country,
-      },
+      name: carToSave.name,
+      brand: carToSave.brand,
+      model: carToSave.model,
+      color: carToSave.color,
+      fuel: carToSave.fuel,
+      engine: carToSave.engine,
+      document: carToSave.document,
+      gearBox: carToSave.gearBox,
+      mileage: carToSave.mileage,
+      year: carToSave.year,
+      price: carToSave.price,
+      images: carToSave.images,
+      description: carToSave.description,
+      carOption: carToSave.carOption,
+      contact: carToSave.contact,
       user: senderId,
       status: "accepted",
     });
-    await newCar.save();
+
+    const savedCar = await newCar.save();
+    console.log("New car created:", savedCar._id);
 
     // Remove the notification from all admin accounts
     for (const admin of admins) {
@@ -238,7 +291,10 @@ export const acceptCar = async (req: any, res: any) => {
       });
     }
 
-    res.status(200).json({ message: "Car accepted successfully", car: newCar });
+    res.status(200).json({
+      message: "Car accepted successfully",
+      car: savedCar,
+    });
   } catch (error: any) {
     console.error("Error accepting car:", error);
     res.status(500).json({ message: error.message || "Error accepting car" });
@@ -275,20 +331,16 @@ export const rejectCar = async (req: any, res: any) => {
       return res.status(404).json({ message: "Notification not found" });
 
     const senderId = notification.senderId;
-    const carId = notification.cars._id;
-    if (!senderId)
-      return res.status(400).json({ message: "Sender ID is required" });
+    const notificationCar = notification.cars._id;
+    console.log("Notification Id Car", notificationCar);
 
-    // Update the car status in the user's cars array
-    await User.findOneAndUpdate(
-      { _id: senderId, "cars._id": carId },
-      {
-        $set: {
-          "cars.$.status": "rejected",
-        },
-      },
-      { new: true }
-    );
+    console.log("Sender ID:", senderId);
+
+    // Find the user
+    const user = await User.findById(senderId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     // Remove the notification from all admin accounts
     for (const admin of admins) {
@@ -305,8 +357,6 @@ export const rejectCar = async (req: any, res: any) => {
     res.status(500).json({ message: error.message || "Error rejecting car" });
   }
 };
-
-// ...existing code...
 
 export const getCarById = async (req: any, res: any) => {
   try {
@@ -325,8 +375,8 @@ export const getAllBrands = async (req: any, res: any) => {
     const cars = await Car.find();
     const brands = Array.from(new Set(cars.map((car) => car.brand))).sort();
     res.status(200).json(brands);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching brands" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message || "Error fetching brands" });
   }
 };
 
