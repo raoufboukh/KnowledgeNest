@@ -106,7 +106,7 @@ export const rejectCar = createAsyncThunk(
 
 const initialState = {
   cars: [],
-  car: null,
+  car: null as any,
   brands: [],
   loading: false,
   error: null as SerializedError | null,

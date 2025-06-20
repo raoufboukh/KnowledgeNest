@@ -97,7 +97,7 @@ const CarsByInformation = ({ brand, model, year }: CarsByInformationProps) => {
                   </div>
                 </div>
                 <Link
-                  href={`/buy/${car.name}`}
+                  href={`/cars/${car._id}`}
                   className="block bg-primary text-accent-2 text-center py-2 rounded-b-xl hover:bg-primary/80 transition-all duration-300"
                 >
                   View Details
