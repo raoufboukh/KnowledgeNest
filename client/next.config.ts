@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       "avatars.githubusercontent.com",
       "platform-lookaside.fbsbx.com",
       "res.cloudinary.com",
+      "images.unsplash.com",
     ],
     remotePatterns: [
       {
