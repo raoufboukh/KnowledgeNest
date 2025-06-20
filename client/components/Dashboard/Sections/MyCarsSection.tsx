@@ -1,9 +1,30 @@
 "use client";
+import { checkAuth } from "@/redux/Slices/AuthSlice";
+import { AppDispatch } from "@/redux/store/store";
 import Image from "next/image";
 import React from "react";
 import { MdEdit, MdDelete, MdVisibility } from "react-icons/md";
+import { useDispatch } from "react-redux";
 
 const MyCarsSection = ({ user }: { user: any }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(checkAuth());
+    }, 3000);
+
+    const handleFocus = () => {
+      dispatch(checkAuth());
+    };
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [dispatch]);
   return (
     <div className="p-6">
       <div className="mb-6 flex justify-between items-center">

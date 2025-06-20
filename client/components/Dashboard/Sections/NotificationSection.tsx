@@ -1,4 +1,5 @@
 "use client";
+import { checkAuth } from "@/redux/Slices/AuthSlice";
 import { acceptCar, rejectCar } from "@/redux/Slices/CarSlices";
 import { AppDispatch } from "@/redux/store/store";
 import Image from "next/image";
@@ -9,6 +10,26 @@ import { useDispatch } from "react-redux";
 const NotificationsSection = ({ user }: { user: any }) => {
   const dispatch = useDispatch<AppDispatch>();
   const notifications = user?.notifications || [];
+
+  const handleAcceptCar = async (notificationId: string) => {
+    try {
+      await dispatch(acceptCar(notificationId)).unwrap();
+      // Refresh user data to get updated notifications
+      await dispatch(checkAuth());
+    } catch (error) {
+      console.error("Error accepting car:", error);
+    }
+  };
+
+  const handleRejectCar = async (notificationId: string) => {
+    try {
+      await dispatch(rejectCar(notificationId)).unwrap();
+      // Refresh user data to get updated notifications
+      await dispatch(checkAuth());
+    } catch (error) {
+      console.error("Error rejecting car:", error);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -80,14 +101,14 @@ const NotificationsSection = ({ user }: { user: any }) => {
               <div className="flex items-center gap-2">
                 <div className="flex gap-1">
                   <button
-                    className="text-green-600 hover:text-green-800 transition-colors p-1"
-                    onClick={() => dispatch(acceptCar(notification._id))}
+                    className="text-green-600 hover:text-green-800 transition-colors p-1 cursor-pointer"
+                    onClick={() => handleAcceptCar(notification._id)}
                   >
                     <MdCheck />
                   </button>
                   <button
-                    className="text-red-600 hover:text-red-800 transition-colors p-1"
-                    onClick={() => dispatch(rejectCar(notification._id))}
+                    className="text-red-600 hover:text-red-800 transition-colors p-1 cursor-pointer"
+                    onClick={() => handleRejectCar(notification._id)}
                   >
                     <MdClose />
                   </button>

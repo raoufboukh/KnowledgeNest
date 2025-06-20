@@ -92,7 +92,7 @@ const Options = ({ formData, setFormData }: any) => {
         <button
           type="button"
           onClick={addOptionField}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-tertiary text-white rounded-lg hover:bg-tertiary/80 transition-colors cursor-pointer duration-300"
         >
           <MdAdd /> Ajouter une option
         </button>
