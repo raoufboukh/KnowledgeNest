@@ -9,9 +9,10 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
   const path = usePathname();
   return (
     <Provider store={store}>
-      {path !== "/login" && path !== "/register" && path !== "/dashboard" && (
-        <Navbar />
-      )}
+      {path !== "/login" &&
+        path !== "/register" &&
+        path !== "/dashboard" &&
+        !path.startsWith("/cars/") && <Navbar />}
       {children}
       {path !== "/login" && path !== "/register" && path !== "/dashboard" && (
         <Footer />
