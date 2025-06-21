@@ -53,7 +53,11 @@ const Dashboard = () => {
           setActiveSection={setActiveSection}
           user={user}
         />
-        <DashboardContent activeSection={activeSection} user={user} />
+        <DashboardContent
+          activeSection={activeSection}
+          user={user}
+          setActiveSection={setActiveSection}
+        />
       </div>
     </div>
   );

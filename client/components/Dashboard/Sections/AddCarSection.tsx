@@ -9,6 +9,7 @@ import { AppDispatch } from "@/redux/store/store";
 import { useDispatch } from "react-redux";
 import { addCar } from "@/redux/Slices/CarSlices";
 import { usePathname } from "next/navigation";
+import { checkAuth } from "@/redux/Slices/AuthSlice";
 
 const AddCarSection = ({ user }: { user: any }) => {
   const [formData, setFormData] = React.useState({
@@ -68,7 +69,7 @@ const AddCarSection = ({ user }: { user: any }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    dispatch(addCar(formData));
+    dispatch(addCar(formData)).then(() => dispatch(checkAuth()));
 
     try {
       setFormData({

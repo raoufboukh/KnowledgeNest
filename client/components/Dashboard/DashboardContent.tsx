@@ -8,18 +8,22 @@ import ProfileSection from "./Sections/ProfileSection";
 interface DashboardContentProps {
   activeSection: string;
   user: any;
+  setActiveSection?: (section: string) => void;
 }
 
 const DashboardContent: React.FC<DashboardContentProps> = ({
   activeSection,
   user,
+  setActiveSection,
 }) => {
   const renderContent = () => {
     switch (activeSection) {
       case "All Cars":
         return <AllCarsSection />;
       case "My Cars":
-        return <MyCarsSection user={user} />;
+        return (
+          <MyCarsSection user={user} setActiveSection={setActiveSection} />
+        );
       case "Notifications":
         return <NotificationsSection user={user} />;
       case "Add Car":

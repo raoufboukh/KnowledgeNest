@@ -1,5 +1,6 @@
 "use client";
-import { getCars } from "@/redux/Slices/CarSlices";
+import { checkAuth } from "@/redux/Slices/AuthSlice";
+import { deleteCar, getCars } from "@/redux/Slices/CarSlices";
 import { AppDispatch, RootState } from "@/redux/store/store";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import { useEffect } from "react";
 import { BiPhone } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { LuFuel } from "react-icons/lu";
-import { MdSpeed } from "react-icons/md";
+import { MdDelete, MdSpeed } from "react-icons/md";
 import { PiEngine } from "react-icons/pi";
 import { TbManualGearbox } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +19,7 @@ const AllCarsSection = () => {
 
   useEffect(() => {
     dispatch(getCars());
-  }, [dispatch, cars.length]);
+  }, [dispatch]);
   return (
     <div className="text-black bg-accent py-8  overflow-hidden">
       {cars.length > 0 ? (
@@ -28,18 +29,30 @@ const AllCarsSection = () => {
               key={index}
               className="bg-accent-2 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 shadow-secondary transition-all duration-300 overflow-hidden"
             >
-              <div className="px-4 py-2">
-                <h3 className="text-xl text-primary font-bold">
-                  {car.brand}, {car.name}
-                </h3>
-                <p className="text-lg font-bold">
-                  {car.year}-{car.engine}{" "}
-                  {car.model.length > 15 ? (
-                    <span className="">{car.model.slice(0, 15)}...</span>
-                  ) : (
-                    <span className="">{car.model}</span>
-                  )}
-                </p>
+              <div className="px-4 py-2 flex items-center justify-between flex-wrap">
+                <div className="basis-4/5">
+                  <h3 className="text-xl text-primary font-bold">
+                    {car.brand}, {car.name}
+                  </h3>
+                  <p className="text-lg font-bold">
+                    {car.year}-{car.engine}{" "}
+                    {car.model.length > 15 ? (
+                      <span className="">{car.model.slice(0, 15)}...</span>
+                    ) : (
+                      <span className="">{car.model}</span>
+                    )}
+                  </p>
+                </div>
+                <button
+                  onClick={() =>
+                    dispatch(deleteCar(car._id)).then(() => {
+                      dispatch(getCars());
+                      dispatch(checkAuth());
+                    })
+                  }
+                >
+                  <MdDelete className="text-red-500 cursor-pointer basis-1/5" />
+                </button>
               </div>
               <Image
                 src={car.images[0]}
