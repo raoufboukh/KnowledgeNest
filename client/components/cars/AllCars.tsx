@@ -1,7 +1,6 @@
 import { RootState } from "@/redux/store/store";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { BiPhone } from "react-icons/bi";
 import { LuFuel } from "react-icons/lu";
 import { MdSpeed } from "react-icons/md";

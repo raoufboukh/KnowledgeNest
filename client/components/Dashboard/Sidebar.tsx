@@ -96,7 +96,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         </ul>
       </nav>
 
-      {/* User Info at bottom */}
       <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50">
         <div className="flex items-center gap-3 relative">
           <Image

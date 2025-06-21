@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     dispatch(login(form))
       .unwrap()
-      .then(() => router.push("/"));
+      .then(() => router.push("/dashboard"));
     setForm({
       email: "",
       password: "",

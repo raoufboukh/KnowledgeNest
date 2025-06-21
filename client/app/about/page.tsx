@@ -9,7 +9,6 @@ import About from "@/components/about/About";
 const AboutPage = () => {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-white py-24">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="container mx-auto px-8 relative z-10">
@@ -52,10 +51,8 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* Main About Section */}
       <About />
 
-      {/* Features Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-8">
           <div className="text-center mb-16">
@@ -91,7 +88,6 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* Team Section */}
       <section className="py-20 bg-accent-2">
         <div className="container mx-auto px-8">
           <div className="text-center mb-16">
@@ -137,7 +133,6 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* Vision Section */}
       <section className="py-20 bg-gradient-to-r from-primary to-primary/80 text-white relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full -translate-x-48 -translate-y-48"></div>
@@ -181,7 +176,6 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-8 text-center">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">

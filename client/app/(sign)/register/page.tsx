@@ -20,7 +20,7 @@ const Register = () => {
     e.preventDefault();
     dispatch(register(form))
       .unwrap()
-      .then(() => router.push("/"));
+      .then(() => router.push("/dashboard"));
     setForm({
       name: "",
       email: "",

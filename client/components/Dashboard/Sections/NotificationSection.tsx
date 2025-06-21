@@ -14,7 +14,6 @@ const NotificationsSection = ({ user }: { user: any }) => {
   const handleAcceptCar = async (notificationId: string) => {
     try {
       await dispatch(acceptCar(notificationId)).unwrap();
-      // Refresh user data to get updated notifications
       await dispatch(checkAuth());
     } catch (error) {
       console.error("Error accepting car:", error);
@@ -24,7 +23,6 @@ const NotificationsSection = ({ user }: { user: any }) => {
   const handleRejectCar = async (notificationId: string) => {
     try {
       await dispatch(rejectCar(notificationId)).unwrap();
-      // Refresh user data to get updated notifications
       await dispatch(checkAuth());
     } catch (error) {
       console.error("Error rejecting car:", error);

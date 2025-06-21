@@ -1,4 +1,3 @@
-import React from "react";
 import { MdArrowBack, MdFavorite, MdPrint, MdShare } from "react-icons/md";
 
 const Header = ({ handleShare, router }: any) => {

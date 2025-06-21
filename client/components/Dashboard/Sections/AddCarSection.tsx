@@ -71,17 +71,6 @@ const AddCarSection = ({ user }: { user: any }) => {
     dispatch(addCar(formData));
 
     try {
-      const cleanData = {
-        ...formData,
-        images: formData.images.filter((img) => img.trim() !== ""),
-        contact: {
-          ...formData.contact,
-          phone: formData.contact.phone.filter((phone) => phone.trim() !== ""),
-        },
-        carOption: formData.carOption.filter((option) => option.trim() !== ""),
-        price: parseFloat(formData.price),
-      };
-
       setFormData({
         name: "",
         brand: "",
@@ -133,10 +122,8 @@ const AddCarSection = ({ user }: { user: any }) => {
       <form onSubmit={handleSubmit} className="mx-auto max-w-4xl space-y-8">
         <BaseInfo formData={formData} setFormData={setFormData} />
 
-        {/* Caractéristiques techniques */}
         <CarTech formData={formData} setFormData={setFormData} />
 
-        {/* Images */}
         <div className="bg-gray-50 p-6 rounded-lg">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">
             Images de la voiture
@@ -189,13 +176,10 @@ const AddCarSection = ({ user }: { user: any }) => {
           />
         </div>
 
-        {/* Options de la voiture */}
         <Options formData={formData} setFormData={setFormData} />
 
-        {/* Informations de contact */}
         <Contact formData={formData} setFormData={setFormData} />
 
-        {/* Boutons de soumission */}
         <div className="flex gap-4 pt-6">
           <button
             type="submit"

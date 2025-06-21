@@ -1,4 +1,3 @@
-import React from "react";
 import { carBrands } from "../constants";
 import Image from "next/image";
 

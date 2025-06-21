@@ -13,7 +13,6 @@ const CarInformation = ({ car, formatPrice }: any) => {
   const [showFullDescription, setShowFullDescription] = React.useState(false);
   return (
     <div className="lg:col-span-2 space-y-6">
-      {/* Car Title */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
         <div className="flex items-start justify-between mb-4">
           <div>
@@ -27,7 +26,7 @@ const CarInformation = ({ car, formatPrice }: any) => {
               </span>
               <span className="flex items-center gap-1">
                 <MdSpeed />
-                {car.mileage}
+                {car.mileage}Km
               </span>
               <span className="flex items-center gap-1">
                 <MdLocationOn />
@@ -47,7 +46,6 @@ const CarInformation = ({ car, formatPrice }: any) => {
         </div>
       </div>
 
-      {/* Image Gallery */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
         <div className="mb-4">
           <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden mb-4">
@@ -60,7 +58,6 @@ const CarInformation = ({ car, formatPrice }: any) => {
             />
           </div>
 
-          {/* Thumbnail Gallery */}
           <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
             {car.images.map((image: string, index: number) => (
               <button
@@ -85,10 +82,8 @@ const CarInformation = ({ car, formatPrice }: any) => {
         </div>
       </div>
 
-      {/* Car Specifications */}
       <Specification car={car} />
 
-      {/* Car Options */}
       {car.carOption && car.carOption.length > 0 && (
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -108,7 +103,6 @@ const CarInformation = ({ car, formatPrice }: any) => {
         </div>
       )}
 
-      {/* Description */}
       {car.description && (
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>

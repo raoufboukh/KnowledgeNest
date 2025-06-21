@@ -1,5 +1,4 @@
 import { carBrands, colors, years } from "@/components/constants";
-import React from "react";
 
 const BaseInfo = ({ formData, setFormData }: any) => {
   return (

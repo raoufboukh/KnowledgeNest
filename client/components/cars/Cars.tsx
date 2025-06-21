@@ -1,89 +1,13 @@
 import Image from "next/image";
-import { CiCalendar } from "react-icons/ci";
-import { GrFormView } from "react-icons/gr";
 import { LuFuel } from "react-icons/lu";
 import { PiEngine } from "react-icons/pi";
-import React from "react";
 import Link from "next/link";
 import { MdSpeed } from "react-icons/md";
 import { TbManualGearbox } from "react-icons/tb";
 import { BiPhone } from "react-icons/bi";
+import { cars } from "../constants";
 
 const Cars = () => {
-  const cars = [
-    {
-      name: "306",
-      image: "/assets/306.jpg",
-      price: 150000,
-      brand: "Peugeot",
-      mileage: "400000",
-      model: "306",
-      color: "Red",
-      fuel: "Petrol",
-      engine: "1.4",
-      gearBox: "Manual",
-      document: "Available",
-      year: 2000,
-      contact: [
-        {
-          name: "Raouf Bouk",
-          email: "zakib2316@gmail.com",
-          phone: "+213 123 456 789",
-          address: "123 Main St, Algiers",
-          city: "Algiers",
-          country: "Algeria",
-        },
-      ],
-    },
-    {
-      name: "Ibiza",
-      image: "/assets/ibiza.jpg",
-      price: 400000,
-      brand: "Seat",
-      mileage: "200000",
-      model: "Ibiza",
-      color: "brown",
-      fuel: "Petrol",
-      engine: "1.4",
-      gearBox: "Manual",
-      document: "Available",
-      year: 2016,
-      contact: [
-        {
-          name: "Raouf Bouk",
-          email: "zakib2316@gmail.com",
-          phone: "+213 123 456 789",
-          address: "123 Main St, Algiers",
-          city: "Algiers",
-          country: "Algeria",
-        },
-      ],
-    },
-    {
-      name: "Polo",
-      image: "/assets/polo.jpg",
-      price: 400000,
-      brand: "Volkswagen",
-      mileage: "200000",
-      model: "Polo",
-      color: "gray",
-      fuel: "Petrol",
-      engine: "1.4",
-      gearBox: "Manual",
-      document: "Available",
-      year: 2016,
-      contact: [
-        {
-          name: "Raouf Bouk",
-          email: "zakib2316@gmail.com",
-          phone: "+213 123 456 789",
-          address: "123 Main St, Algiers",
-          city: "Algiers",
-          country: "Algeria",
-        },
-      ],
-    },
-  ];
   return (
     <div className="text-black bg-accent py-8 lg:py-16 overflow-hidden">
       <h2 className="h2">Our Featured Cars</h2>
@@ -152,7 +76,7 @@ const Cars = () => {
               </div>
             </div>
             <Link
-              href={`/buy/${car.name}`}
+              href={`/cars/${car.name}`}
               className="block bg-primary text-accent-2 text-center py-2 rounded-b-xl hover:bg-primary/80 transition-all duration-300"
             >
               View Details

@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import AllCarsSection from "./Sections/AllCarsSection";
 import MyCarsSection from "./Sections/MyCarsSection";
 import NotificationsSection from "./Sections/NotificationSection";
@@ -35,7 +34,6 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   return (
     <div className="flex-1 p-6 bg-accent-2">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-primary mb-2">
             {activeSection}
@@ -43,7 +41,6 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
           <div className="h-1 w-20 bg-primary rounded-full"></div>
         </div>
 
-        {/* Content */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           {renderContent()}
         </div>

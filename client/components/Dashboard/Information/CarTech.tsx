@@ -1,5 +1,4 @@
 import { documentTypes, fuelTypes, gearBoxTypes } from "@/components/constants";
-import React from "react";
 
 const CarTech = ({ formData, setFormData }: any) => {
   return (

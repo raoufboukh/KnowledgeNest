@@ -26,8 +26,7 @@ router.get(
     session: true,
   }),
   (req, res) => {
-    console.log("Google Auth Success:", req.user);
-    res.redirect("http://localhost:3000/");
+    res.redirect("http://localhost:3000/dashboard");
   }
 );
 

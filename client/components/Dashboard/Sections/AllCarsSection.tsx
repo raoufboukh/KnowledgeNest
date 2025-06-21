@@ -3,7 +3,7 @@ import { getCars } from "@/redux/Slices/CarSlices";
 import { AppDispatch, RootState } from "@/redux/store/store";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { BiPhone } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { LuFuel } from "react-icons/lu";
@@ -47,7 +47,6 @@ const AllCarsSection = () => {
                 width={500}
                 height={300}
                 className="w-full h-56 object-cover"
-                onClick={() => console.log(car.contact)}
               />
               <div className="px-4 py-2">
                 <p className="text-lg font-bold py-1">{car.price} dz</p>

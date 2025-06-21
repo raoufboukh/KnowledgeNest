@@ -36,7 +36,6 @@ const Navbar = () => {
             className="lg:hidden cursor-pointer right-5 text-2xl absolute top-4"
             onClick={() => {
               setIsOpen(!isOpen);
-              console.log(isOpen);
             }}
           />
           <div className="flex flex-col lg:flex-row lg:py-0 pt-20 gap-4 lg:gap-20">

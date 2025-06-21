@@ -16,6 +16,12 @@ const ProfileSection = ({ user }: { user: any }) => {
     email: user?.email || "",
     image: user?.image || "",
   });
+  const accepted = user.cars.filter(
+    (car: any) => car.status === "accepted"
+  ).length;
+  const pending = user.cars.filter(
+    (car: any) => car.status === "pending"
+  ).length;
 
   const handleSave = async () => {
     try {
@@ -42,7 +48,6 @@ const ProfileSection = ({ user }: { user: any }) => {
       reader.onload = () => {
         const newImageData = reader.result as string;
         setProfileData({ ...profileData, image: newImageData });
-        console.log("Image updated:", newImageData);
       };
       reader.readAsDataURL(file);
     }
@@ -168,18 +173,19 @@ const ProfileSection = ({ user }: { user: any }) => {
           )}
         </div>
 
-        {/* Account Stats */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg text-center">
-            <div className="text-2xl font-bold text-blue-600">5</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {user.cars.length}
+            </div>
             <div className="text-sm text-blue-800">Cars Submitted</div>
           </div>
           <div className="bg-green-50 p-4 rounded-lg text-center">
-            <div className="text-2xl font-bold text-green-600">3</div>
+            <div className="text-2xl font-bold text-green-600">{accepted}</div>
             <div className="text-sm text-green-800">Cars Approved</div>
           </div>
           <div className="bg-yellow-50 p-4 rounded-lg text-center">
-            <div className="text-2xl font-bold text-yellow-600">2</div>
+            <div className="text-2xl font-bold text-yellow-600">{pending}</div>
             <div className="text-sm text-yellow-800">Pending Review</div>
           </div>
         </div>

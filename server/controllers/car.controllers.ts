@@ -125,8 +125,6 @@ export const addCar = async (req: any, res: any) => {
       user: req.user._id,
     };
 
-    console.log("New car data:", newCar);
-
     await User.findByIdAndUpdate(req.user._id, {
       $push: {
         cars: newCar,
@@ -162,7 +160,6 @@ export const acceptCar = async (req: any, res: any) => {
     if (!id)
       return res.status(400).json({ message: "Notification ID is required" });
 
-    // Find the notification across all admin users
     let notification = null;
     let adminWithNotification = null;
 
@@ -170,7 +167,6 @@ export const acceptCar = async (req: any, res: any) => {
     if (admins.length === 0)
       return res.status(404).json({ message: "No admins found" });
 
-    // Search for the notification in all admin accounts
     for (const admin of admins) {
       const foundNotification = admin.notifications.find(
         (notif: any) => notif._id.toString() === id
@@ -188,23 +184,11 @@ export const acceptCar = async (req: any, res: any) => {
     const senderId = notification.senderId;
     const notificationCar = notification.cars._id;
 
-    console.log(notificationCar);
-
-    console.log("Sender ID:", senderId);
-    // console.log(
-    //   "Notification car data:",
-    //   JSON.stringify(notificationCar, null, 2)
-    // );
-
-    // Find the user
     const user = await User.findById(senderId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log("User found:", user.name);
-
-    // Since the car ID from notification is undefined, let's find the car by matching other fields
     let carIndex = -1;
     let matchedCar = null;
 
@@ -212,16 +196,12 @@ export const acceptCar = async (req: any, res: any) => {
       for (let i = 0; i < user.cars.length; i++) {
         const car = user.cars[i];
 
-        // Match by multiple fields to find the correct car
         if (
           car._id.toString() === notificationCar.toString() &&
-          car.status === "pending" // Ensure we only accept pending cars
+          car.status === "pending"
         ) {
-          // Only pending cars
           carIndex = i;
           matchedCar = car;
-          console.log("Found matching car at index:", i);
-          console.log("Car ID:", car._id);
           break;
         }
       }
@@ -233,7 +213,6 @@ export const acceptCar = async (req: any, res: any) => {
         .json({ message: "Matching pending car not found in user's array" });
     }
 
-    // Update using direct index (most reliable method)
     const updateQuery: { [key: string]: any } = {};
     updateQuery[`cars.${carIndex}.status`] = "accepted";
 
@@ -243,17 +222,7 @@ export const acceptCar = async (req: any, res: any) => {
       { new: true }
     );
 
-    console.log(
-      "Update with index result:",
-      updateResult ? "Success" : "Failed"
-    );
-
-    if (updateResult) {
-      console.log("Updated car status:", updateResult.cars[carIndex].status);
-    }
-
-    // Create a new car document in the Car collection using the matched car data
-    const carToSave = matchedCar; // Use the actual car from user's array
+    const carToSave = matchedCar;
 
     if (!carToSave) {
       return res.status(404).json({ message: "Car data not found" });
@@ -280,9 +249,7 @@ export const acceptCar = async (req: any, res: any) => {
     });
 
     const savedCar = await newCar.save();
-    console.log("New car created:", savedCar._id);
 
-    // Remove the notification from all admin accounts
     for (const admin of admins) {
       await User.findByIdAndUpdate(admin._id, {
         $pull: {
@@ -307,7 +274,6 @@ export const rejectCar = async (req: any, res: any) => {
     if (!id)
       return res.status(400).json({ message: "Notification ID is required" });
 
-    // Find the notification across all admin users
     let notification = null;
     let adminWithNotification = null;
 
@@ -315,7 +281,6 @@ export const rejectCar = async (req: any, res: any) => {
     if (admins.length === 0)
       return res.status(404).json({ message: "No admins found" });
 
-    // Search for the notification in all admin accounts
     for (const admin of admins) {
       const foundNotification = admin.notifications.find(
         (notif: any) => notif._id.toString() === id
@@ -332,17 +297,12 @@ export const rejectCar = async (req: any, res: any) => {
 
     const senderId = notification.senderId;
     const notificationCar = notification.cars._id;
-    console.log("Notification Id Car", notificationCar);
 
-    console.log("Sender ID:", senderId);
-
-    // Find the user
     const user = await User.findById(senderId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Remove the notification from all admin accounts
     for (const admin of admins) {
       await User.findByIdAndUpdate(admin._id, {
         $pull: {

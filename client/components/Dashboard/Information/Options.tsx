@@ -1,5 +1,4 @@
 import { commonCarOptions } from "@/components/constants";
-import React from "react";
 import { MdAdd, MdClose } from "react-icons/md";
 
 const Options = ({ formData, setFormData }: any) => {
@@ -41,7 +40,6 @@ const Options = ({ formData, setFormData }: any) => {
         Options et équipements
       </h3>
 
-      {/* Options communes (boutons) */}
       <div className="mb-4">
         <p className="text-sm font-medium text-gray-700 mb-2">
           Options courantes :
@@ -64,7 +62,6 @@ const Options = ({ formData, setFormData }: any) => {
         </div>
       </div>
 
-      {/* Options personnalisées */}
       <div>
         <p className="text-sm font-medium text-gray-700 mb-2">
           Options personnalisées :

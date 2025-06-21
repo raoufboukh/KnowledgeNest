@@ -1,5 +1,4 @@
 import { algerianCities } from "@/components/constants";
-import React from "react";
 import { MdAdd, MdClose } from "react-icons/md";
 
 const Contact = ({ formData, setFormData }: any) => {
@@ -139,7 +138,6 @@ const Contact = ({ formData, setFormData }: any) => {
         </div>
       </div>
 
-      {/* Numéros de téléphone */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Numéros de téléphone *

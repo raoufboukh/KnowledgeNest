@@ -82,15 +82,12 @@ const CarById = () => {
 
   return (
     <div className="min-h-screen bg-accent-2">
-      {/* Header */}
       <Header handleShare={handleShare} router={router} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column - Images and Details */}
           <CarInformation car={car} formatPrice={formatPrice} />
 
-          {/* Right Column - Contact */}
           <ContactSingle car={car} />
         </div>
       </div>
