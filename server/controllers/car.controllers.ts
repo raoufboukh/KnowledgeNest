@@ -229,6 +229,7 @@ export const acceptCar = async (req: any, res: any) => {
     }
 
     const newCar = new Car({
+      _id: carToSave._id,
       name: carToSave.name,
       brand: carToSave.brand,
       model: carToSave.model,
@@ -345,9 +346,160 @@ export const deleteCar = async (req: any, res: any) => {
     const { id } = req.params;
     if (!id) return res.status(400).json({ message: "Car ID is required" });
     const car = await Car.findByIdAndDelete(id);
-    if (!car) return res.status(404).json({ message: "Car not found" });
+    await User.updateOne(
+      { cars: { $elemMatch: { _id: id } } },
+      { $pull: { cars: { _id: id } } }
+    );
     res.status(200).json({ message: "Car deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting car" });
+  }
+};
+
+export const updateCar = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: "Car ID is required" });
+
+    const {
+      name,
+      brand,
+      model,
+      color,
+      fuel,
+      engine,
+      document,
+      gearBox,
+      mileage,
+      year,
+      price,
+      images,
+      description,
+      contact,
+      carOption,
+    } = req.body;
+
+    if (
+      !name ||
+      !brand ||
+      !model ||
+      !color ||
+      !fuel ||
+      !engine ||
+      !document ||
+      !gearBox ||
+      !mileage ||
+      !year ||
+      !images ||
+      !description ||
+      !contact
+    )
+      return res.status(400).json({
+        message: !name
+          ? "Name is required"
+          : !brand
+          ? "Brand is required"
+          : !model
+          ? "Model is required"
+          : !color
+          ? "Color is required"
+          : !fuel
+          ? "Fuel is required"
+          : !engine
+          ? "Engine is required"
+          : !document
+          ? "Document is required"
+          : !gearBox
+          ? "GearBox is required"
+          : !mileage
+          ? "Mileage is required"
+          : !year
+          ? "Year is required"
+          : !images
+          ? "Images are required"
+          : !description
+          ? "Description is required"
+          : "Contact is required",
+      });
+
+    const car = await Car.findById(id);
+    if (!car) return res.status(404).json({ message: "Car not found" });
+
+    const admins = await User.find({ role: "admin" });
+    if (admins.length === 0)
+      return res.status(404).json({ message: "No admins found" });
+
+    const processedImages = [...images];
+    for (let i = 0; i < processedImages.length; i++) {
+      if (processedImages[i].startsWith("data:image")) {
+        const result = await cloudinary.uploader.upload(processedImages[i], {
+          folder: "cars",
+        });
+        processedImages[i] = result.secure_url;
+      }
+    }
+
+    const carUpdated = await User.findOneAndUpdate(
+      { "cars._id": id },
+      {
+        $set: {
+          "cars.$.name": name,
+          "cars.$.brand": brand,
+          "cars.$.model": model,
+          "cars.$.color": color,
+          "cars.$.fuel": fuel,
+          "cars.$.engine": engine,
+          "cars.$.document": document,
+          "cars.$.gearBox": gearBox,
+          "cars.$.mileage": mileage,
+          "cars.$.year": year,
+          "cars.$.price": price,
+          "cars.$.images": processedImages,
+          "cars.$.description": description,
+          "cars.$.contact": contact,
+          "cars.$.carOption": carOption,
+          "cars.$.status": "pending",
+        },
+      },
+      { new: true }
+    );
+
+    await Car.findByIdAndDelete(id);
+
+    const user = await User.findOne({ "cars._id": id });
+    const updatedCarFromArray = user?.cars.find(
+      (car: any) => car._id.toString() === id
+    );
+
+    for (const admin of admins) {
+      await User.findByIdAndUpdate(admin._id, {
+        $pull: {
+          notifications: { "cars._id": id },
+        },
+      });
+
+      await User.findByIdAndUpdate(admin._id, {
+        $push: {
+          notifications: {
+            $each: [
+              {
+                message: `Car updated: ${brand} ${model}`,
+                cars: updatedCarFromArray,
+                senderId: req.user._id,
+                createdAt: new Date(),
+              },
+            ],
+            $position: 0,
+          },
+        },
+      });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Car updated successfully", car: carUpdated });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message || "Error updating car" });
+    console.error("Error updating car:", error);
   }
 };

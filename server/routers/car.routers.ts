@@ -8,6 +8,7 @@ import {
   getCars,
   getCarsByInformation,
   rejectCar,
+  updateCar,
 } from "../controllers/car.controllers.ts";
 
 const carRouter = express.Router();
@@ -18,6 +19,7 @@ carRouter.get("/getAllBrands", getAllBrands);
 carRouter.post("/add", addCar);
 carRouter.get("/:id", getCarById);
 carRouter.delete("/:id", deleteCar);
+carRouter.put("/update/:id", updateCar);
 carRouter.put("/reject/:id", rejectCar);
 carRouter.put("/accept/:id", acceptCar);
 

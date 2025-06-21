@@ -104,6 +104,21 @@ export const rejectCar = createAsyncThunk(
   }
 );
 
+export const updateCar = createAsyncThunk(
+  "cars/updateCar",
+  async (carData: any, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.put(
+        `/cars/update/${carData._id}`,
+        carData
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   cars: [],
   car: null as any,
@@ -223,6 +238,23 @@ export const carSlice = createSlice({
         }
       })
       .addCase(rejectCar.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as SerializedError;
+      })
+      .addCase(updateCar.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCar.fulfilled, (state: any, action: any) => {
+        state.loading = false;
+        const index = state.cars.findIndex(
+          (car: any) => car._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.cars[index] = action.payload;
+        }
+      })
+      .addCase(updateCar.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as SerializedError;
       });
