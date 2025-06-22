@@ -26,10 +26,6 @@ const Dashboard = () => {
     if (hasCheckedAuth && !isChecking) {
       if (!user) {
         router.push("/login");
-      } else if ((user as any).role === "admin") {
-        setActiveSection("All Cars");
-      } else {
-        setActiveSection("My Cars");
       }
     }
   }, [user, isChecking, router, hasCheckedAuth]);

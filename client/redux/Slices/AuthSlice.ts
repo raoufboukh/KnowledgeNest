@@ -92,7 +92,7 @@ export const updateProfile = createAsyncThunk(
 );
 
 const initialState = {
-  user: null,
+  user: null as any,
   isUpdating: false,
   isChecking: false,
   isSignInUp: false,
