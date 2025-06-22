@@ -1,44 +1,84 @@
 "use client";
 import { checkAuth } from "@/redux/Slices/AuthSlice";
+import CarUpdated from "@/components/car/CarUpdated/CarUpdated";
 import { AppDispatch } from "@/redux/store/store";
 import Image from "next/image";
 import React from "react";
-import { MdEdit, MdDelete, MdVisibility } from "react-icons/md";
+import { MdEdit, MdVisibility, MdDelete, MdAdd } from "react-icons/md";
 import { useDispatch } from "react-redux";
+import View from "@/components/car/View/View";
+import { deleteCar, updateCar, getCars } from "@/redux/Slices/CarSlices";
 
-const MyCarsSection = ({ user }: { user: any }) => {
+const MyCarsSection = ({
+  user,
+  setActiveSection,
+}: {
+  user: any;
+  setActiveSection: any;
+}) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [selectedCar, setSelectedCar] = React.useState<any>(null);
+  const [isViewOpen, setIsViewOpen] = React.useState(false);
+  const [isEditOpen, setIsEditOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(checkAuth());
-    }, 3000);
+  const handleEditCar = (car: any) => {
+    setSelectedCar(car);
+    setIsEditOpen(true);
+  };
 
-    const handleFocus = () => {
-      dispatch(checkAuth());
-    };
+  const handleCloseEdit = () => {
+    setIsEditOpen(false);
+    setSelectedCar(null);
+  };
 
-    window.addEventListener("focus", handleFocus);
+  const handleSaveCar = async (updatedCar: any) => {
+    try {
+      dispatch(updateCar(updatedCar)).then(() => {
+        dispatch(checkAuth());
+        dispatch(getCars());
+        setIsEditOpen(false);
+      });
+    } catch (error) {
+      console.error("Error saving car:", error);
+    }
+  };
 
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [dispatch]);
+  const handleViewCar = (car: any) => {
+    setSelectedCar(car);
+    setIsViewOpen(true);
+  };
+
+  const handleCloseView = () => {
+    setIsViewOpen(false);
+    setSelectedCar(null);
+  };
+
+  const handleDeleteCar = (carId: string) => {
+    dispatch(deleteCar(carId)).then(() => dispatch(checkAuth()));
+  };
+
   return (
     <div className="p-6">
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">My Cars</h2>
-          <p className="text-gray-600">Manage your submitted cars</p>
+          <h2 className="text-2xl font-bold text-gray-800">Mes Voitures</h2>
+          <p className="text-gray-600">Gérez vos voitures soumises</p>
         </div>
-        <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/80 transition-colors">
-          Add New Car
+        <button
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/80 transition-colors cursor-pointer"
+          onClick={() => {
+            setActiveSection("Add Car");
+          }}
+        >
+          <span className="md:hidden block">
+            <MdAdd />{" "}
+          </span>{" "}
+          <span className="md:block hidden">Add Car</span>
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {user.cars.map((car: any) => (
+        {user.cars?.map((car: any) => (
           <div
             key={car._id}
             className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
@@ -71,18 +111,27 @@ const MyCarsSection = ({ user }: { user: any }) => {
               </p>
               <p className="text-primary font-bold text-xl mb-2">{car.price}</p>
               <p className="text-sm text-gray-500 mb-3">
-                Added: {new Date(car.createdAt).toLocaleDateString()}
+                Added: {new Date(car.createdAt).toLocaleDateString("fr-FR")}
               </p>
 
               <div className="flex gap-2">
-                <button className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors">
+                <button
+                  className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors"
+                  onClick={() => handleViewCar(car)}
+                >
                   <MdVisibility />
                   View
                 </button>
-                <button className="flex items-center justify-center gap-2 bg-blue-500 text-white py-2 px-3 rounded-lg hover:bg-blue-600 transition-colors">
+                <button
+                  className="flex items-center justify-center gap-2 bg-blue-500 text-white py-2 px-3 rounded-lg hover:bg-blue-600 transition-colors"
+                  onClick={() => handleEditCar(car)}
+                >
                   <MdEdit />
                 </button>
-                <button className="flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-3 rounded-lg hover:bg-red-600 transition-colors">
+                <button
+                  className="flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-3 rounded-lg hover:bg-red-600 transition-colors"
+                  onClick={() => handleDeleteCar(car._id)}
+                >
                   <MdDelete />
                 </button>
               </div>
@@ -91,20 +140,34 @@ const MyCarsSection = ({ user }: { user: any }) => {
         ))}
       </div>
 
-      {user.cars.length === 0 && (
+      {(!user.cars || user.cars.length === 0) && (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">🚗</div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">
-            No cars yet
+            Aucune voiture
           </h3>
           <p className="text-gray-500 mb-4">
-            You haven't submitted any cars yet.
+            Vous n'avez pas encore soumis de voitures.
           </p>
           <button className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/80 transition-colors">
-            Add Your First Car
+            Ajouter votre première voiture
           </button>
         </div>
       )}
+
+      <View
+        car={selectedCar}
+        isOpen={isViewOpen}
+        onClose={handleCloseView}
+        onEdit={handleEditCar}
+        onDelete={handleDeleteCar}
+      />
+      <CarUpdated
+        car={selectedCar}
+        isOpen={isEditOpen}
+        onClose={handleCloseEdit}
+        onSave={handleSaveCar}
+      />
     </div>
   );
 };
