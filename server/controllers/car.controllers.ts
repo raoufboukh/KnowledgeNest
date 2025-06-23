@@ -304,6 +304,11 @@ export const rejectCar = async (req: any, res: any) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    await User.findOneAndUpdate(
+      { _id: senderId, "cars._id": notificationCar },
+      { $set: { cars: { status: "rejected" } } }
+    );
+
     for (const admin of admins) {
       await User.findByIdAndUpdate(admin._id, {
         $pull: {
@@ -423,7 +428,6 @@ export const updateCar = async (req: any, res: any) => {
       });
 
     const car = await Car.findById(id);
-    if (!car) return res.status(404).json({ message: "Car not found" });
 
     const admins = await User.find({ role: "admin" });
     if (admins.length === 0)

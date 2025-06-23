@@ -104,9 +104,10 @@ export const register = async (req: any, res: any) => {
           .status(500)
           .json({ message: "Registration successful but login failed" });
       }
-      res
-        .status(201)
-        .json({ message: "User created successfully", user: newUser });
+      res.status(201).json({
+        message: "User created successfully",
+        user: newUser,
+      });
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
@@ -122,7 +123,10 @@ export const logout = (req: any, res: any) => {
 
 export const checkAuth = (req: any, res: any) => {
   if (req.isAuthenticated()) {
-    res.status(200).json({ user: req.user });
+    res.status(200).json({
+      message: "User is authenticated",
+      user: req.user,
+    });
   } else {
     res.status(401).json({ message: "Unauthorized" });
   }
@@ -163,9 +167,10 @@ export const updateProfile = async (req: any, res: any) => {
       { new: true }
     );
 
-    res
-      .status(200)
-      .json({ message: "Profile updated successfully", user: updatedUser });
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message || "Server Error" });
   }
