@@ -149,7 +149,10 @@ const MyCarsSection = ({
           <p className="text-gray-500 mb-4">
             Vous n'avez pas encore soumis de voitures.
           </p>
-          <button className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/80 transition-colors">
+          <button
+            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/80 transition-colors cursor-pointer"
+            onClick={() => setActiveSection("Add Car")}
+          >
             Ajouter votre première voiture
           </button>
         </div>

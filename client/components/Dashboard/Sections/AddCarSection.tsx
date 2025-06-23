@@ -96,11 +96,8 @@ const AddCarSection = ({ user }: { user: any }) => {
         },
         carOption: [""],
       });
-
-      alert("Voiture ajoutée avec succès!");
     } catch (error) {
       console.error("Error creating car:", error);
-      alert("Erreur lors de l'ajout de la voiture");
     } finally {
       setIsSubmitting(false);
     }
