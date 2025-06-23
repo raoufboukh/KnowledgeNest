@@ -4,6 +4,7 @@ import {
   createSlice,
   SerializedError,
 } from "@reduxjs/toolkit";
+import { enqueueSnackbar } from "notistack";
 
 export const getCars = createAsyncThunk(
   "cars/getCars",
@@ -12,6 +13,9 @@ export const getCars = createAsyncThunk(
       const { data } = await axiosInstance.get("/cars");
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -24,6 +28,9 @@ export const getCarById = createAsyncThunk(
       const { data } = await axiosInstance.get(`/cars/${id}`);
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -34,8 +41,14 @@ export const addCar = createAsyncThunk(
   async (carData: any, { rejectWithValue }) => {
     try {
       const { data } = await axiosInstance.post("/cars/add", carData);
+      enqueueSnackbar(data.message, {
+        variant: "success",
+      });
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -51,6 +64,9 @@ export const getCarsByInformation = createAsyncThunk(
       );
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -63,6 +79,9 @@ export const getAllBrands = createAsyncThunk(
       const { data } = await axiosInstance.get("/cars/getAllBrands");
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -73,8 +92,14 @@ export const deleteCar = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const { data } = await axiosInstance.delete(`/cars/${id}`);
+      enqueueSnackbar(data.message, {
+        variant: "success",
+      });
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -85,8 +110,14 @@ export const acceptCar = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const { data } = await axiosInstance.put(`/cars/accept/${id}`);
+      enqueueSnackbar(data.message, {
+        variant: "success",
+      });
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -97,8 +128,14 @@ export const rejectCar = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const { data } = await axiosInstance.put(`/cars/reject/${id}`);
+      enqueueSnackbar(data.message, {
+        variant: "success",
+      });
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -112,8 +149,14 @@ export const updateCar = createAsyncThunk(
         `/cars/update/${carData._id}`,
         carData
       );
+      enqueueSnackbar(data.message, {
+        variant: "success",
+      });
       return data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }

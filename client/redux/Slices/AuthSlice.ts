@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { enqueueSnackbar } from "notistack";
 
 export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
@@ -18,8 +19,14 @@ export const login = createAsyncThunk(
   async (data: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("/auth/login", data);
+      enqueueSnackbar(response.data.message, {
+        variant: "success",
+      });
       return response.data.user;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -33,8 +40,14 @@ export const register = createAsyncThunk(
   ) => {
     try {
       const response = await axiosInstance.post("/auth/register", data);
+      enqueueSnackbar(response.data.message, {
+        variant: "success",
+      });
       return response.data.user;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -45,8 +58,14 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/auth/logout");
+      enqueueSnackbar(response.data.message, {
+        variant: "success",
+      });
       return response.data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -57,8 +76,14 @@ export const googleSuccess = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/auth/google/success");
+      enqueueSnackbar(response.data.message, {
+        variant: "success",
+      });
       return response.data.user;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -69,8 +94,14 @@ export const googleFailed = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/auth/google/failed");
+      enqueueSnackbar(response.data.message, {
+        variant: "error",
+      });
       return response.data;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
@@ -84,8 +115,14 @@ export const updateProfile = createAsyncThunk(
   ) => {
     try {
       const response = await axiosInstance.put("/auth/update", data);
+      enqueueSnackbar(response.data.message, {
+        variant: "success",
+      });
       return response.data.user;
     } catch (error: any) {
+      enqueueSnackbar(error.response.data.message, {
+        variant: "error",
+      });
       return rejectWithValue(error.response.data);
     }
   }
